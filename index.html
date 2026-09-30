@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RegattaHub · Κέντρο Αγώνα TEST</title>
+<meta name="description" content="Κέντρο Αγώνα RegattaHub για τον διοργανωτή όμιλο. Δοκιμαστική έκδοση.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230d2841'/%3E%3Cpath d='M9 24V8h8a6 6 0 010 12h-8m8 0 7 5' fill='none' stroke='%235bd0cc' stroke-width='3'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="header.css">
+<link rel="stylesheet" href="palette.css">
+<script src="app.js" defer></script>
+</head>
+<body>
+<div class="app-shell">
+<header class="viewer-header">
+<div class="viewer-header-inner">
+<div class="entryflow-logo"><img src="assets/entryflow.png" alt="EntryFlow — Regatta Entry Automation System" width="180" height="63"></div>
+<div class="viewer-heading"><h1>ΚΕΝΤΡΟ ΑΓΩΝΑ</h1><h2 id="race-title">Κέντρο Αγώνα — TEST</h2><div class="race-meta"><span id="race-date"></span><span class="meta-divider" aria-hidden="true"></span><span id="organizer">ΝΟΕΦ</span></div><p class="viewer-subtitle">RegattaHub · Χώρος διοργανωτή</p></div>
+<div class="header-organizer"><span class="test-badge">TEST</span><div id="organizer-logo-wrap" hidden><img id="organizer-logo" alt="Σήμα διοργανωτή" width="150" height="76"></div></div>
+</div></header>
+<main>
+<div class="section-head"><div><p class="eyebrow">ΔΙΑΧΕΙΡΙΣΗ &amp; ΥΛΙΚΟ</p><h2>Ο αγώνας σας</h2></div><button class="settings-button" id="settings-open" type="button">Ρυθμίσεις TEST</button></div>
+<section class="card-grid" id="cards" aria-label="Υπηρεσίες αγώνα"></section>
+<aside class="test-note"><span class="test-note-tag">ΔΟΚΙΜΑΣΤΙΚΗ ΕΚΔΟΣΗ</span><p>Οι σύνδεσμοι δεν έχουν συνδεθεί ακόμη. Από τις «Ρυθμίσεις TEST» μπορείτε να δοκιμάσετε τους δικούς σας, μόνο για αυτή την προβολή.</p></aside>
+<footer><span><strong>RegattaHub</strong> / Race Center</span><span>Κέντρο Αγώνα · Χώρος διοργανωτή</span></footer>
+</main>
+</div>
+<dialog id="detail-dialog" aria-labelledby="detail-title"><div class="dialog-heading"><p class="eyebrow">ΚΕΝΤΡΟ ΑΓΩΝΑ</p><button class="close-button" type="button" aria-label="Κλείσιμο">×</button></div><h2 id="detail-title"></h2><p id="detail-description"></p><div class="empty-state"><strong>Δεν έχει οριστεί σύνδεσμος</strong><p>Προσθέστε τον σύνδεσμο στις «Ρυθμίσεις TEST» για να δοκιμάσετε αυτή την επιλογή.</p></div><button class="primary-button" id="detail-settings" type="button">Προσθήκη συνδέσμου</button></dialog>
+<dialog id="settings-dialog" aria-labelledby="settings-title"><div class="dialog-heading"><p class="eyebrow">ΔΟΚΙΜΑΣΤΙΚΕΣ ΡΥΘΜΙΣΕΙΣ</p><button class="close-button" type="button" aria-label="Κλείσιμο">×</button></div><h2 id="settings-title">Σύνδεσμοι αγώνα</h2><p>Οι αλλαγές ισχύουν μόνο όσο μένει ανοιχτή αυτή η σελίδα. Με την ανανέωση επανέρχονται οι αρχικές ρυθμίσεις.</p><form id="settings-form"><div class="field-grid"><label>Τίτλος αγώνα<input name="raceTitle" required maxlength="120"></label><label>Ημερομηνία αγώνα<input name="raceDate" maxlength="120"></label></div><label>Διοργανωτής<input name="organizer" maxlength="160"></label><label>Σύνδεσμος σήματος διοργανωτή (προαιρετικό)<input name="organizerLogoUrl" type="url" placeholder="https://…" autocomplete="off"></label><div id="link-fields"></div><p class="form-error" id="form-error" role="alert"></p><div class="form-actions"><button class="secondary-button" type="button" id="settings-cancel">Ακύρωση</button><button class="primary-button" type="submit">Εφαρμογή στο TEST</button></div></form></dialog>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+</body></html>

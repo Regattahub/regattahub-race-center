@@ -1,0 +1,25 @@
+/* TEST palette aligned with the registration form. */
+:root{background:#125f8d;--teal:#4d8b1f;--muted:#475e69}
+body{min-height:100dvh;background:#125f8d;padding:24px}
+.app-shell{width:100%;max-width:1180px;margin:0 auto;background:#e0e8e6;border:1px solid #d0ddda;border-radius:13px;box-shadow:0 12px 36px #0639552b}
+.viewer-header{border-radius:12px 12px 0 0;box-shadow:none}
+.viewer-header-inner{padding:26px 30px}
+.entryflow-logo{background:#eef2ef}
+main{max-width:none;margin:0;padding:30px 30px 0;background:#e0e8e6;border-radius:0 0 12px 12px}
+.section-head h2{color:#143a63}
+.settings-button,.secondary-button{background:#f7faf8;border-color:#b6c9c7}
+.settings-button:hover,.secondary-button:hover{background:#ecf3ef}
+.card-grid .card{border-color:#cbd8d5;box-shadow:0 4px 14px #234e4912}
+.card-grid .card:hover{border-color:#46829d;background:#f6fbfd;box-shadow:0 6px 18px #234e4920}
+.card-grid .card[data-section="entryForm"]{background:#4d8b1f;border-color:#4d8b1f}
+.card-grid .card[data-section="entryForm"] .card-title,.card-grid .card[data-section="entryForm"] .card-icon{color:#fff}
+.card-grid .card[data-section="entryForm"]:hover{background:#3d7118;border-color:#3d7118}
+.test-note{background:#edf3ef;border-left-color:#829e92}
+.test-note-tag{color:#3e5c52}
+.test-note p{color:#445e55}
+footer{border-color:#becfc8;color:#526b62}
+footer strong{color:#285448}
+.primary-button:hover{background:#3d7118;border-color:#3d7118}
+button:focus-visible,a:focus-visible,input:focus-visible{outline-color:#164c7d}
+@media(max-width:700px){body{padding:14px}.viewer-header-inner{padding:23px 20px}main{padding:24px 20px 0}.app-shell{border-radius:11px}}
+@media(max-width:440px){body{padding:10px}main{padding:22px 15px 0}.viewer-header-inner{padding:21px 17px}}

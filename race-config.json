@@ -1,17 +1,20 @@
 {
   "schemaVersion": 1,
   "mode": "test",
-  "raceTitle": "Κέντρο Αγώνα — TEST",
-  "raceDate": "",
-  "organizer": "ΝΟΕΦ",
+  "raceTitle": "ΠΛΑΤΦΟΡΜΑ TEST 2026",
+  "raceDate": "19 & 20 Σεπτεμβρίου 2026",
+  "organizer": "ΙΟΠ-ΔΕΗ / ΝΑΟΕΦΚ",
+  "organizerLogoUrl": "",
+  "organizerBannerUrl": "",
+  "settingsEndpoint": "https://script.google.com/macros/s/AKfycbwZHkHtIf_wc9cMTh51gOUidUjBQ1b2-1JjmlZbUPzlfO1GnYpJ76lRIP0x2Gak_G52/exec?action=settings&settings=1UPMKC_dUtJ958dgUpby3HYBwVPPyNe9AlastWySzK98",
+  "settingsSheetUrl": "https://docs.google.com/spreadsheets/d/1UPMKC_dUtJ958dgUpby3HYBwVPPyNe9AlastWySzK98/edit",
   "links": {
-    "entries": "https://script.google.com/macros/s/AKfycbxypRrvt7RXKxd7BSord_heX76WQ9-_7q2AgMVlXrblaGmdz2ktozyRKQ3U2O3uZjt-/exec?settings=1kSHbQfF3Btchj3GoOWUHdUF4JE6d8gBRXvSyn7doSrY",
+    "entries": "https://script.google.com/macros/s/AKfycbzlAUytmKnOikHlz2ayIjCrhtAOyS0SviGrIvsCduRPj2hfUJNuTG0zikLIP_kUoLvb8A/exec?settings=1UPMKC_dUtJ958dgUpby3HYBwVPPyNe9AlastWySzK98",
     "crews": "",
     "results": "",
     "notice": "",
     "entryForm": "",
     "website": "",
     "photos": ""
-  },
-  "organizerLogoUrl": ""
+  }
 }

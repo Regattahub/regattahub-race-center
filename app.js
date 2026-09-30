@@ -8,7 +8,9 @@ const sections=[
  {key:"website",title:"Website αγώνα",description:"Ανακοινώσεις και πληροφορίες διοργανωτή.",icon:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a18 18 0 010 18 18 18 0 010-18Z"/>'},
  {key:"photos",title:"Φωτογραφίες & Video",description:"Το φωτογραφικό υλικό και τα video του αγώνα.",icon:'<path d="M8 5l2-2h4l2 2h5v15H3V5h5Z"/><circle cx="12" cy="12" r="4"/>'}
 ];
-let config={raceTitle:"TEST RACE 2027",raceDate:"1 & 2 Οκτωβρίου 2027",organizer:"Δοκιμαστικός αγώνας ομίλου",organizerLogoUrl:"",links:{}};
+let config={raceTitle:"ΠΛΑΤΦΟΡΜΑ TEST 2026",raceDate:"",organizer:"",organizerLogoUrl:"",organizerBannerUrl:"",links:{}};
+let sheetState="loading";
+let previewApplied=false;
 const $=id=>document.getElementById(id);
 function validUrl(value){try{const u=new URL(value);return ["https:","http:"].includes(u.protocol)&&!u.username&&!u.password;}catch{return false;}}
 function render(){
@@ -17,6 +19,11 @@ function render(){
  const logoUrl=config.organizerLogoUrl||"";wrap.hidden=true;
  logo.onload=()=>{wrap.hidden=false;};logo.onerror=()=>{wrap.hidden=true;};
  if(validUrl(logoUrl)){logo.alt=`Σήμα διοργανωτή: ${config.organizer}`;if(logo.getAttribute("src")!==logoUrl)logo.src=logoUrl;else if(logo.complete&&logo.naturalWidth>0)wrap.hidden=false;}else logo.removeAttribute("src");
+ const banner=$("organizer-banner"),bannerWrap=$("organizer-banner-wrap");
+ bannerWrap.hidden=true;
+ banner.onload=()=>{bannerWrap.hidden=false;};banner.onerror=()=>{bannerWrap.hidden=true;};
+ const bannerUrl=config.organizerBannerUrl||"";
+ if(validUrl(bannerUrl)){if(banner.getAttribute("src")!==bannerUrl)banner.src=bannerUrl;else if(banner.complete&&banner.naturalWidth>0)bannerWrap.hidden=false;}else banner.removeAttribute("src");
  document.title=`${config.raceTitle} · RegattaHub TEST`;
  $("cards").replaceChildren(...sections.map(s=>{
    const url=config.links[s.key];const connected=!!url&&validUrl(url);const el=document.createElement(connected?"a":"button");
@@ -27,16 +34,72 @@ function render(){
    return el;
  }));
  const pending=sections.some(s=>!validUrl(config.links[s.key]||""));
- document.querySelector(".test-note p").textContent=pending?"Οι σύνδεσμοι δεν έχουν συνδεθεί όλοι ακόμη. Από τις «Ρυθμίσεις TEST» μπορείτε να δοκιμάσετε τους δικούς σας, μόνο για αυτή την προβολή.":"Οι δοκιμαστικοί σύνδεσμοι ισχύουν μόνο για αυτή την προβολή. Με την ανανέωση επανέρχονται οι αρχικές ρυθμίσεις.";
+ let note=sheetState==="loaded"?"Τα στοιχεία και ο πίνακας συμμετοχών φορτώθηκαν από τις ΡΥΘΜΙΣΕΙΣ του TEST. Οι αλλαγές στο Sheet εμφανίζονται με ανανέωση της σελίδας.":sheetState==="loading"?"Φόρτωση ρυθμίσεων από το TEST Sheet…":"Δεν ήταν δυνατή η ανάγνωση του TEST Sheet. Εμφανίζονται οι αρχικές δοκιμαστικές ρυθμίσεις.";
+ if(pending)note+=" Δεν έχουν οριστεί όλοι οι σύνδεσμοι.";
+ if(previewApplied)note+=" Οι αλλαγές της προεπισκόπησης ισχύουν μόνο μέχρι την ανανέωση.";
+ document.querySelector(".test-note p").textContent=note;
 }
 function showDetail(s){$("detail-title").textContent=s.title;$("detail-description").textContent=s.description;$("detail-dialog").showModal();}
 function openSettings(){
- $("form-error").textContent="";const form=$("settings-form");for(const key of ["raceTitle","raceDate","organizer","organizerLogoUrl"])form.elements[key].value=config[key]||"";
+ $("form-error").textContent="";
+ const sheetLink=$("settings-sheet-link");sheetLink.hidden=!config.settingsSheetUrl;if(config.settingsSheetUrl)sheetLink.href=config.settingsSheetUrl;
+ const form=$("settings-form");for(const key of ["raceTitle","raceDate","organizer","organizerLogoUrl"])form.elements[key].value=config[key]||"";
  $("link-fields").replaceChildren(...sections.map(s=>{const label=document.createElement("label");label.textContent=s.title;const input=document.createElement("input");input.type="url";input.name=s.key;input.value=config.links[s.key]||"";input.placeholder="https://…";input.autocomplete="off";label.append(input);return label;}));$("settings-dialog").showModal();
 }
 document.querySelectorAll(".close-button").forEach(b=>b.addEventListener("click",()=>b.closest("dialog").close()));
 $("settings-open").addEventListener("click",openSettings);$("settings-cancel").addEventListener("click",()=>$("settings-dialog").close());
 $("detail-settings").addEventListener("click",()=>{$("detail-dialog").close();openSettings();});
-$("settings-form").addEventListener("submit",e=>{e.preventDefault();const data=new FormData(e.target);const links={};for(const s of sections){const url=String(data.get(s.key)||"").trim();if(url&&!validUrl(url)){$("form-error").textContent=`Ο σύνδεσμος «${s.title}» πρέπει να αρχίζει με https:// ή http:// και να μην περιλαμβάνει στοιχεία σύνδεσης.`;e.target.elements[s.key].focus();return;}links[s.key]=url;}const organizerLogoUrl=String(data.get("organizerLogoUrl")||"").trim();if(organizerLogoUrl&&!validUrl(organizerLogoUrl)){$("form-error").textContent="Συμπληρώστε έγκυρο σύνδεσμο εικόνας για το σήμα διοργανωτή.";e.target.elements.organizerLogoUrl.focus();return;}const title=String(data.get("raceTitle")).trim();if(!title){$("form-error").textContent="Συμπληρώστε τον τίτλο αγώνα.";return;}config={...config,raceTitle:title,raceDate:String(data.get("raceDate")).trim(),organizer:String(data.get("organizer")).trim(),organizerLogoUrl,links};render();$("settings-dialog").close();$("toast").textContent="Οι σύνδεσμοι εφαρμόστηκαν για αυτή την προβολή TEST.";$("toast").hidden=false;setTimeout(()=>{$("toast").hidden=true;},4500);});
-render();
-fetch("race-config.json").then(r=>{if(!r.ok)throw new Error("config");return r.json();}).then(c=>{if(c.schemaVersion!==1||c.mode!=="test"||typeof c.raceTitle!=="string"||!c.raceTitle.trim())throw new Error("schema");config={...config,...c,links:{...c.links}};render();}).catch(()=>{document.querySelector(".test-note p").textContent="Δεν φορτώθηκαν οι ρυθμίσεις αγώνα. Η σελίδα εμφανίζει την αρχική δοκιμαστική προβολή. Μπορείτε να χρησιμοποιήσετε τις «Ρυθμίσεις TEST».";});
+$("settings-form").addEventListener("submit",e=>{e.preventDefault();const data=new FormData(e.target);const links={};for(const s of sections){const url=String(data.get(s.key)||"").trim();if(url&&!validUrl(url)){$("form-error").textContent=`Ο σύνδεσμος «${s.title}» πρέπει να αρχίζει με https:// ή http:// και να μην περιλαμβάνει στοιχεία σύνδεσης.`;e.target.elements[s.key].focus();return;}links[s.key]=url;}const organizerLogoUrl=String(data.get("organizerLogoUrl")||"").trim();if(organizerLogoUrl&&!validUrl(organizerLogoUrl)){$("form-error").textContent="Συμπληρώστε έγκυρο σύνδεσμο εικόνας για το σήμα διοργανωτή.";e.target.elements.organizerLogoUrl.focus();return;}const title=String(data.get("raceTitle")).trim();if(!title){$("form-error").textContent="Συμπληρώστε τον τίτλο αγώνα.";return;}config={...config,raceTitle:title,raceDate:String(data.get("raceDate")).trim(),organizer:String(data.get("organizer")).trim(),organizerLogoUrl,links};previewApplied=true;render();$("settings-dialog").close();$("toast").textContent="Οι σύνδεσμοι εφαρμόστηκαν για αυτή την προβολή TEST.";$("toast").hidden=false;setTimeout(()=>{$("toast").hidden=true;},4500);});
+const TEST_SETTINGS_ID="1UPMKC_dUtJ958dgUpby3HYBwVPPyNe9AlastWySzK98";
+const TEST_SETTINGS_BASE="https://script.google.com/macros/s/AKfycbwZHkHtIf_wc9cMTh51gOUidUjBQ1b2-1JjmlZbUPzlfO1GnYpJ76lRIP0x2Gak_G52/exec";
+function checkedSettingsEndpoint(value){
+ const u=new URL(value);
+ if(u.origin+u.pathname!==TEST_SETTINGS_BASE||u.username||u.password||u.searchParams.get("settings")!==TEST_SETTINGS_ID||u.searchParams.get("action")!=="settings")throw new Error("TEST endpoint mismatch");
+ return u;
+}
+function readSheetSettings(endpoint){
+ return new Promise((resolve,reject)=>{
+  let u;try{u=checkedSettingsEndpoint(endpoint);}catch(error){reject(error);return;}
+  const name="raceCenterSettings_"+Date.now()+"_"+Math.random().toString(36).slice(2);
+  const script=document.createElement("script");let settled=false;
+  const finish=(error,data)=>{
+   if(settled)return;settled=true;clearTimeout(timer);script.remove();
+   // A delayed response can still execute after removal. Leave a harmless callback briefly.
+   window[name]=()=>{};setTimeout(()=>{delete window[name];},30000);
+   if(error)reject(error);else resolve(data);
+  };
+  const timer=setTimeout(()=>finish(new Error("settings timeout")),20000);
+  window[name]=data=>finish(null,data);
+  script.onerror=()=>finish(new Error("settings unavailable"));
+  u.searchParams.set("callback",name);u.searchParams.set("_",String(Date.now()));
+  script.src=u.toString();script.referrerPolicy="no-referrer";document.head.append(script);
+ });
+}
+function mergeSheetSettings(base,data){
+ if(!data||data.success!==true||typeof data.raceTitle!=="string"||!data.raceTitle.trim())throw new Error("invalid settings response");
+ if(typeof data.viewer!=="string"||!validUrl(data.viewer)||new URL(data.viewer).searchParams.get("settings")!==TEST_SETTINGS_ID)throw new Error("viewer is not TEST");
+ const next={...base,links:{...base.links,entries:data.viewer},raceTitle:data.raceTitle.trim()};
+ if(typeof data.raceDate==="string")next.raceDate=data.raceDate;
+ if(typeof data.organizerName==="string")next.organizer=data.organizerName;
+ if(typeof data.organizerBanner==="string")next.organizerBannerUrl=validUrl(data.organizerBanner)?data.organizerBanner:"";
+ if(typeof data.organizerLogoUrl==="string")next.organizerLogoUrl=validUrl(data.organizerLogoUrl)?data.organizerLogoUrl:"";
+ // Optional fields for a later endpoint extension. Missing fields leave these cards unconfigured.
+ for(const [key,field] of Object.entries({crews:"crewsUrl",results:"resultsUrl",notice:"noticeUrl",entryForm:"entryFormUrl",website:"websiteUrl",photos:"photosUrl"})){
+  if(typeof data[field]==="string")next.links[key]=validUrl(data[field])?data[field]:"";
+ }
+ if(!next.links.entryForm&&/^\d{10,20}$/.test(data.jotformFormId||""))next.links.entryForm="https://form.jotform.com/"+data.jotformFormId;
+ return next;
+}
+async function initialize(){
+ $("settings-open").disabled=true;$("detail-settings").disabled=true;render();
+ try{
+  const response=await fetch("race-config.json",{cache:"no-store"});if(!response.ok)throw new Error("config");
+  const c=await response.json();
+  if(c.schemaVersion!==1||c.mode!=="test"||typeof c.raceTitle!=="string"||!c.raceTitle.trim())throw new Error("schema");
+  checkedSettingsEndpoint(c.settingsEndpoint);
+  config={...config,...c,links:{...c.links}};render();
+  config=mergeSheetSettings(config,await readSheetSettings(c.settingsEndpoint));sheetState="loaded";
+ }catch(error){sheetState="error";}
+ finally{render();$("settings-open").disabled=false;$("detail-settings").disabled=false;}
+}
+initialize();

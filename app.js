@@ -5,7 +5,7 @@ const sections=[
  {key:"results",title:"Αποτελέσματα",description:"Κατατάξεις και αποτελέσματα ιστιοδρομιών.",icon:'<path d="M8 3h8v6a4 4 0 01-8 0V3ZM8 5H4v3a4 4 0 004 4M16 5h4v3a4 4 0 01-4 4M12 13v7M8 21h8"/>'},
  {key:"notice",title:"Προκήρυξη",description:"Η προκήρυξη και οι όροι του αγώνα.",icon:'<path d="M14 3H5v18h14V8l-5-5ZM14 3v5h5M8 12h8M8 16h6"/>'},
  {key:"entryForm",title:"Δήλωση συμμετοχής",description:"Η φόρμα εγγραφής στον αγώνα.",icon:'<rect x="4" y="4" width="16" height="17" rx="2"/><path d="M9 4V2h6v2M8 10h8M8 14h8M8 18h4"/>'},
- {key:"website",title:"Website αγώνα",description:"Ανακοινώσεις και πληροφορίες διοργανωτή.",icon:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a18 18 0 010 18 18 18 0 010-18Z"/>'},
+ {key:"website",title:"Τροποποίηση πληρώματος",description:"Άνοιγμα της φόρμας τροποποίησης πληρώματος.",icon:'<circle cx="9" cy="8" r="3"/><path d="M3 20v-2a6 6 0 0112 0v2M16 5a3 3 0 010 6M19 20v-2a6 6 0 00-2-4"/>'},
  {key:"photos",title:"Φωτογραφίες & Video",description:"Το φωτογραφικό υλικό και τα video του αγώνα.",icon:'<path d="M8 5l2-2h4l2 2h5v15H3V5h5Z"/><circle cx="12" cy="12" r="4"/>'}
 ];
 let config={raceTitle:"ΠΛΑΤΦΟΡΜΑ TEST 2026",raceDate:"",organizer:"",organizerLogoUrl:"",organizerBannerUrl:"",links:{}};

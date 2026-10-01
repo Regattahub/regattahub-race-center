@@ -10,7 +10,6 @@ const sections=[
 ];
 let config={raceTitle:"ΠΛΑΤΦΟΡΜΑ TEST 2026",raceDate:"",organizer:"",organizerLogoUrl:"",organizerBannerUrl:"",links:{}};
 let sheetState="loading";
-let previewApplied=false;
 const $=id=>document.getElementById(id);
 function validUrl(value){try{const u=new URL(value);return ["https:","http:"].includes(u.protocol)&&!u.username&&!u.password;}catch{return false;}}
 function render(){
@@ -34,24 +33,14 @@ function render(){
    return el;
  }));
  const pending=sections.some(s=>!validUrl(config.links[s.key]||""));
- let note=sheetState==="loaded"?"Τα στοιχεία και ο πίνακας συμμετοχών φορτώθηκαν από τις ΡΥΘΜΙΣΕΙΣ του TEST. Οι αλλαγές στο Sheet εμφανίζονται με ανανέωση της σελίδας.":sheetState==="loading"?"Φόρτωση ρυθμίσεων από το TEST Sheet…":"Δεν ήταν δυνατή η ανάγνωση του TEST Sheet. Εμφανίζονται οι αρχικές δοκιμαστικές ρυθμίσεις.";
- if(pending)note+=" Δεν έχουν οριστεί όλοι οι σύνδεσμοι.";
- if(previewApplied)note+=" Οι αλλαγές της προεπισκόπησης ισχύουν μόνο μέχρι την ανανέωση.";
+ let note=sheetState==="loaded"?"Οι πληροφορίες του αγώνα ενημερώθηκαν.":sheetState==="loading"?"Φόρτωση πληροφοριών αγώνα…":"Οι πληροφορίες του αγώνα είναι προσωρινά μη διαθέσιμες.";
+ if(pending)note+=" Ορισμένες επιλογές θα ενεργοποιηθούν όταν δημοσιευτούν οι σύνδεσμοί τους.";
  document.querySelector(".test-note p").textContent=note;
 }
 function showDetail(s){$("detail-title").textContent=s.title;$("detail-description").textContent=s.description;$("detail-dialog").showModal();}
-function openSettings(){
- $("form-error").textContent="";
- const sheetLink=$("settings-sheet-link");sheetLink.hidden=!config.settingsSheetUrl;if(config.settingsSheetUrl)sheetLink.href=config.settingsSheetUrl;
- const form=$("settings-form");for(const key of ["raceTitle","raceDate","organizer","organizerLogoUrl"])form.elements[key].value=config[key]||"";
- $("link-fields").replaceChildren(...sections.map(s=>{const label=document.createElement("label");label.textContent=s.title;const input=document.createElement("input");input.type="url";input.name=s.key;input.value=config.links[s.key]||"";input.placeholder="https://…";input.autocomplete="off";label.append(input);return label;}));$("settings-dialog").showModal();
-}
 document.querySelectorAll(".close-button").forEach(b=>b.addEventListener("click",()=>b.closest("dialog").close()));
-$("settings-open").addEventListener("click",openSettings);$("settings-cancel").addEventListener("click",()=>$("settings-dialog").close());
-$("detail-settings").addEventListener("click",()=>{$("detail-dialog").close();openSettings();});
-$("settings-form").addEventListener("submit",e=>{e.preventDefault();const data=new FormData(e.target);const links={};for(const s of sections){const url=String(data.get(s.key)||"").trim();if(url&&!validUrl(url)){$("form-error").textContent=`Ο σύνδεσμος «${s.title}» πρέπει να αρχίζει με https:// ή http:// και να μην περιλαμβάνει στοιχεία σύνδεσης.`;e.target.elements[s.key].focus();return;}links[s.key]=url;}const organizerLogoUrl=String(data.get("organizerLogoUrl")||"").trim();if(organizerLogoUrl&&!validUrl(organizerLogoUrl)){$("form-error").textContent="Συμπληρώστε έγκυρο σύνδεσμο εικόνας για το σήμα διοργανωτή.";e.target.elements.organizerLogoUrl.focus();return;}const title=String(data.get("raceTitle")).trim();if(!title){$("form-error").textContent="Συμπληρώστε τον τίτλο αγώνα.";return;}config={...config,raceTitle:title,raceDate:String(data.get("raceDate")).trim(),organizer:String(data.get("organizer")).trim(),organizerLogoUrl,links};previewApplied=true;render();$("settings-dialog").close();$("toast").textContent="Οι σύνδεσμοι εφαρμόστηκαν για αυτή την προβολή TEST.";$("toast").hidden=false;setTimeout(()=>{$("toast").hidden=true;},4500);});
 const TEST_SETTINGS_ID="1UPMKC_dUtJ958dgUpby3HYBwVPPyNe9AlastWySzK98";
-const TEST_SETTINGS_BASE="https://script.google.com/macros/s/AKfycbwZHkHtIf_wc9cMTh51gOUidUjBQ1b2-1JjmlZbUPzlfO1GnYpJ76lRIP0x2Gak_G52/exec";
+const TEST_SETTINGS_BASE="https://script.google.com/macros/s/AKfycbytWK8tSR7gwrvsm2KM7fRUPi2yhPv1jjr2tt0a9PT-Wj7wLaxmAf_x4mQQjd2uKB-1/exec";
 function checkedSettingsEndpoint(value){
  const u=new URL(value);
  if(u.origin+u.pathname!==TEST_SETTINGS_BASE||u.username||u.password||u.searchParams.get("settings")!==TEST_SETTINGS_ID||u.searchParams.get("action")!=="settings")throw new Error("TEST endpoint mismatch");
@@ -91,7 +80,7 @@ function mergeSheetSettings(base,data){
  return next;
 }
 async function initialize(){
- $("settings-open").disabled=true;$("detail-settings").disabled=true;render();
+ render();
  try{
   const response=await fetch("race-config.json",{cache:"no-store"});if(!response.ok)throw new Error("config");
   const c=await response.json();
@@ -100,6 +89,6 @@ async function initialize(){
   config={...config,...c,links:{...c.links}};render();
   config=mergeSheetSettings(config,await readSheetSettings(c.settingsEndpoint));sheetState="loaded";
  }catch(error){sheetState="error";}
- finally{render();$("settings-open").disabled=false;$("detail-settings").disabled=false;}
+ finally{render();}
 }
 initialize();

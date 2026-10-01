@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "mode": "test",
   "raceTitle": "ΠΛΑΤΦΟΡΜΑ TEST 2026",
-  "raceDate": "19 & 20 Σεπτεμβρίου 2026",
+  "raceDate": "3 & 04 Οκτ",
   "organizer": "ΙΟΠ-ΔΕΗ / ΝΑΟΕΦΚ",
-  "organizerLogoUrl": "",
+  "organizerLogoUrl": "https://regattahub.github.io/regattahub-race-center/assets/noef-organizer.png",
   "organizerBannerUrl": "",
   "settingsEndpoint": "https://script.google.com/macros/s/AKfycbytWK8tSR7gwrvsm2KM7fRUPi2yhPv1jjr2tt0a9PT-Wj7wLaxmAf_x4mQQjd2uKB-1/exec?action=settings&settings=1UPMKC_dUtJ958dgUpby3HYBwVPPyNe9AlastWySzK98",
   "links": {
@@ -12,7 +12,7 @@
     "crews": "",
     "results": "",
     "notice": "",
-    "entryForm": "",
+    "entryForm": "https://form.jotform.com/262680804736362",
     "website": "",
     "photos": ""
   }
